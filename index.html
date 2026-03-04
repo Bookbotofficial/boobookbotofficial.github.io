@@ -5,149 +5,403 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BookBot — Make fast. Make simple.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,700&family=Barlow:wght@300;400;500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:     #08080A;
-  --bg2:    #111114;
-  --bg3:    #18181C;
-  --border: #222228;
-  --gold:   #FFC828;
-  --gold2:  #FFE080;
-  --white:  #F8F8F8;
-  --muted:  #666672;
-  --text2:  #A0A0B0;
-  --teal:   #22D3BB;
-  --sans:   'Outfit', sans-serif;
-  --mono:   'JetBrains Mono', monospace;
+  --bg:     #1C2330;
+  --bg2:    #212A38;
+  --bg3:    #27334A;
+  --border: rgba(255,255,255,0.07);
+  --red:    #E8321A;
+  --orange: #FF5E1A;
+  --grad:   linear-gradient(115deg, #E8321A 0%, #FF6B1A 60%, #FF9520 100%);
+  --white:  #F0F2F5;
+  --muted:  #8090A8;
+  --dim:    #4A5568;
+  --cond:   'Barlow Condensed', sans-serif;
+  --body:   'Barlow', sans-serif;
+  --mono:   'DM Mono', monospace;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--white);font-family:var(--sans);font-size:16px;line-height:1.6;overflow-x:hidden}
 
-/* ── Noise overlay ── */
-body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:.4}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
 
-.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+/* ── Diagonal speed lines bg ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      115deg,
+      transparent,
+      transparent 120px,
+      rgba(232,50,26,0.018) 120px,
+      rgba(232,50,26,0.018) 121px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrap { max-width: 1140px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
 
 /* ── Nav ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);background:rgba(8,8,10,.85);border-bottom:1px solid var(--border)}
-.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1080px;margin:0 auto}
-.nav-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;text-decoration:none;color:var(--white)}
-.nav-logo-icon{width:32px;height:32px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
-.nav-logo span{color:var(--gold)}
-.nav-links{display:flex;align-items:center;gap:28px}
-.nav-links a{color:var(--text2);text-decoration:none;font-size:14px;font-weight:500;transition:color .15s}
-.nav-links a:hover{color:var(--white)}
-.nav-cta{background:var(--gold);color:var(--bg);padding:9px 20px;border-radius:6px;font-weight:700;font-size:14px;text-decoration:none;transition:background .15s}
-.nav-cta:hover{background:var(--gold2)}
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(28,35,48,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 28px; max-width: 1140px; margin: 0 auto;
+}
+.nav-logo {
+  font-family: var(--cond); font-size: 22px; font-weight: 800;
+  letter-spacing: .06em; text-decoration: none; color: var(--white);
+  text-transform: uppercase;
+}
+.nav-logo span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a {
+  font-family: var(--cond); font-size: 13px; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; transition: color .15s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  font-family: var(--cond); font-size: 13px; font-weight: 800;
+  letter-spacing: .1em; text-transform: uppercase;
+  background: var(--grad); color: white;
+  padding: 9px 22px; clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  text-decoration: none; transition: opacity .15s;
+}
+.nav-cta:hover { opacity: .88; }
 
 /* ── Hero ── */
-.hero{padding:160px 0 100px;text-align:center;position:relative}
-.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(255,200,40,.07) 0%,transparent 70%);pointer-events:none}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,200,40,.08);border:1px solid rgba(255,200,40,.2);border-radius:100px;padding:6px 16px;font-family:var(--mono);font-size:12px;color:var(--gold);margin-bottom:32px;letter-spacing:.04em}
-.hero-badge span{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.hero h1{font-size:clamp(40px,7vw,80px);font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:24px}
-.hero h1 em{font-style:normal;color:var(--gold)}
-.hero-sub{font-size:clamp(16px,2vw,20px);color:var(--text2);max-width:540px;margin:0 auto 48px;font-weight:400;line-height:1.6}
-.hero-actions{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
-.btn-primary{background:var(--gold);color:var(--bg);padding:15px 32px;border-radius:8px;font-weight:700;font-size:16px;text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
-.btn-primary:hover{background:var(--gold2);transform:translateY(-1px)}
-.btn-secondary{background:transparent;color:var(--white);padding:15px 32px;border-radius:8px;font-weight:600;font-size:16px;text-decoration:none;border:1px solid var(--border);transition:all .15s}
-.btn-secondary:hover{border-color:var(--white)}
-.hero-note{font-size:13px;color:var(--muted);margin-top:16px}
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 120px 0 80px;
+  position: relative; overflow: hidden;
+}
 
-/* ── Demo bubble ── */
-.demo-wrap{max-width:480px;margin:72px auto 0;background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-.demo-header{background:var(--bg3);padding:14px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
-.demo-avatar{width:36px;height:36px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.demo-name{font-weight:600;font-size:14px}
-.demo-status{font-size:12px;color:var(--teal)}
-.demo-body{padding:20px}
-.bubble{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;max-width:85%;margin-bottom:10px}
-.bubble.user{background:#2D5F3F;margin-left:auto;border-bottom-right-radius:3px}
-.bubble.bot{background:var(--bg3);border:1px solid var(--border);border-bottom-left-radius:3px}
-.bubble.bot strong{color:var(--gold)}
-.bubble-time{font-size:11px;color:var(--muted);text-align:right;margin-top:4px}
+/* Speed streak — top right */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 10%; right: -10%;
+  width: 70vw; height: 70vh;
+  background: radial-gradient(ellipse at 80% 30%, rgba(232,50,26,0.09) 0%, transparent 65%);
+  pointer-events: none;
+  transform: rotate(-15deg);
+}
 
-/* ── Stats ── */
-.stats{padding:60px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
-.stat{background:var(--bg);padding:40px 24px;text-align:center}
-.stat-num{font-size:42px;font-weight:800;color:var(--gold);letter-spacing:-.03em;line-height:1}
-.stat-label{font-size:14px;color:var(--text2);margin-top:8px}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 440px;
+  gap: 80px;
+  align-items: center;
+}
 
-/* ── How it works ── */
-.section{padding:100px 0}
-.section-label{font-family:var(--mono);font-size:12px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
-.section-title{font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-.02em;margin-bottom:16px}
-.section-sub{font-size:18px;color:var(--text2);max-width:480px}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
-.step{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:32px;position:relative;overflow:hidden;transition:border-color .2s}
-.step:hover{border-color:rgba(255,200,40,.3)}
-.step::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
-.step-num{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:16px;letter-spacing:.08em}
-.step-icon{font-size:28px;margin-bottom:16px}
-.step h3{font-size:18px;font-weight:700;margin-bottom:10px}
-.step p{font-size:14px;color:var(--text2);line-height:1.6}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 28px;
+}
+.hero-badge::before {
+  content: '';
+  width: 28px; height: 2px;
+  background: var(--grad);
+}
+
+.hero h1 {
+  font-family: var(--cond);
+  font-size: clamp(52px, 7.5vw, 96px);
+  font-weight: 900;
+  line-height: .95;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.hero h1 .line2 {
+  display: block;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero h1 .line3 {
+  display: block;
+  color: rgba(240,242,245,0.35);
+  font-weight: 300;
+  font-style: italic;
+}
+
+.hero-sub {
+  font-size: 17px; font-weight: 300; color: var(--muted);
+  max-width: 440px; margin-bottom: 44px; line-height: 1.7;
+}
+
+.hero-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 48px; }
+.btn-primary {
+  font-family: var(--cond); font-size: 15px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  background: var(--grad); color: white; padding: 16px 36px;
+  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+  text-decoration: none; transition: opacity .15s; display: inline-block;
+}
+.btn-primary:hover { opacity: .88; }
+.btn-ghost {
+  font-family: var(--cond); font-size: 15px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid var(--dim); padding-bottom: 2px;
+  transition: color .15s, border-color .15s;
+}
+.btn-ghost:hover { color: var(--white); border-color: var(--white); }
+
+.hero-stats {
+  display: flex; gap: 40px;
+}
+.hero-stat { }
+.hero-stat-num {
+  font-family: var(--cond); font-size: 32px; font-weight: 900; letter-spacing: -.02em;
+  background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+.hero-stat-label {
+  font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px;
+}
+
+/* ── Chat demo card ── */
+.demo-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--red);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+  overflow: hidden;
+}
+.demo-topbar {
+  background: var(--bg3);
+  padding: 12px 18px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.demo-dot { width: 8px; height: 8px; border-radius: 50%; }
+.demo-status { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: auto; }
+.demo-status span { color: #4ADE80; }
+.demo-body { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.bubble {
+  padding: 10px 14px;
+  font-size: 13.5px; line-height: 1.55;
+  max-width: 88%;
+}
+.bubble.user {
+  background: linear-gradient(115deg, rgba(232,50,26,0.25), rgba(255,94,26,0.2));
+  border: 1px solid rgba(232,50,26,0.3);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+  align-self: flex-end;
+}
+.bubble.bot {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  clip-path: polygon(8px 0, 100% 0, 100% 100%, 0 calc(100% - 8px), 0 0);
+}
+.bubble.bot strong { color: var(--orange); }
+.bubble-time { font-family: var(--mono); font-size: 10px; color: var(--dim); text-align: right; margin-top: -6px; }
+
+/* ── Section base ── */
+.section { padding: 100px 0; position: relative; z-index: 1; }
+.s-label {
+  font-family: var(--mono); font-size: 11px; color: var(--red);
+  letter-spacing: .14em; text-transform: uppercase; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 12px;
+}
+.s-label::before { content: '//'; opacity: .5; }
+.s-title {
+  font-family: var(--cond); font-size: clamp(36px, 5vw, 58px); font-weight: 900;
+  text-transform: uppercase; letter-spacing: -.01em; line-height: .95; margin-bottom: 20px;
+}
+.s-title em { font-style: italic; font-weight: 300; color: var(--muted); }
+.s-sub { font-size: 16px; color: var(--muted); font-weight: 300; max-width: 480px; line-height: 1.7; }
+
+/* ── Divider ── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+  margin: 0;
+}
+
+/* ── Steps ── */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; }
+.step {
+  background: var(--bg2); padding: 36px 28px; position: relative; overflow: hidden;
+  transition: background .2s;
+}
+.step:hover { background: var(--bg3); }
+.step::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--grad); opacity: 0; transition: opacity .2s;
+}
+.step:hover::before { opacity: 1; }
+.step-num {
+  font-family: var(--mono); font-size: 10px; color: var(--dim);
+  letter-spacing: .1em; margin-bottom: 20px;
+}
+.step-icon { font-size: 26px; margin-bottom: 16px; }
+.step h3 { font-family: var(--cond); font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 10px; }
+.step p { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.65; }
 
 /* ── Industries ── */
-.industries{padding:80px 0;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.ind-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:48px}
-.ind-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:24px;display:flex;align-items:center;gap:14px;transition:border-color .2s}
-.ind-card:hover{border-color:rgba(255,200,40,.3)}
-.ind-icon{font-size:28px;width:48px;height:48px;background:var(--bg3);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ind-name{font-weight:600;font-size:15px}
-.ind-desc{font-size:13px;color:var(--text2);margin-top:2px}
+.ind-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 48px; }
+.ind-card {
+  background: var(--bg2); padding: 22px 24px;
+  display: flex; align-items: center; gap: 16px;
+  border-left: 2px solid transparent; transition: all .15s;
+}
+.ind-card:hover { background: var(--bg3); border-left-color: var(--red); }
+.ind-icon { font-size: 24px; flex-shrink: 0; }
+.ind-name { font-family: var(--cond); font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.ind-desc { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 300; }
 
 /* ── Pricing ── */
-.pricing{padding:100px 0}
-.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px}
-.plan{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;transition:border-color .2s}
-.plan:hover{border-color:rgba(255,200,40,.3)}
-.plan.featured{border-color:var(--gold);background:linear-gradient(180deg,rgba(255,200,40,.06) 0%,var(--bg2) 100%)}
-.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--bg);font-size:11px;font-weight:700;padding:4px 12px;border-radius:100px;white-space:nowrap;font-family:var(--mono);letter-spacing:.04em}
-.plan-name{font-size:14px;font-weight:600;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;font-family:var(--mono);margin-bottom:12px}
-.plan-price{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1}
-.plan-price sup{font-size:20px;vertical-align:super;font-weight:600}
-.plan-price sub{font-size:15px;font-weight:400;color:var(--muted)}
-.plan-desc{font-size:13px;color:var(--text2);margin:12px 0 20px;line-height:1.5}
-.plan-divider{height:1px;background:var(--border);margin:20px 0}
-.plan-features{list-style:none;display:flex;flex-direction:column;gap:10px}
-.plan-features li{font-size:13px;color:var(--text2);display:flex;align-items:flex-start;gap:8px}
-.plan-features li::before{content:'✓';color:var(--gold);font-weight:700;flex-shrink:0;margin-top:1px}
-.plan-features li.muted::before{content:'·';color:var(--muted)}
-.plan-features li.muted{color:var(--muted)}
-.plan-btn{display:block;text-align:center;margin-top:24px;padding:12px;border-radius:7px;font-weight:700;font-size:14px;text-decoration:none;transition:all .15s}
-.plan-btn.outline{border:1px solid var(--border);color:var(--white)}
-.plan-btn.outline:hover{border-color:var(--gold);color:var(--gold)}
-.plan-btn.solid{background:var(--gold);color:var(--bg)}
-.plan-btn.solid:hover{background:var(--gold2)}
+.pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 56px; }
+.plan {
+  background: var(--bg2); padding: 28px 24px; position: relative;
+  border-top: 2px solid transparent; transition: all .2s;
+}
+.plan:hover { background: var(--bg3); }
+.plan.featured {
+  background: linear-gradient(180deg, rgba(232,50,26,0.08) 0%, var(--bg2) 100%);
+  border-top-color: var(--red);
+}
+.plan-badge {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 16px;
+}
+.plan-name {
+  font-family: var(--cond); font-size: 13px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+}
+.plan-price {
+  font-family: var(--cond); font-size: 52px; font-weight: 900; line-height: 1;
+  letter-spacing: -.02em; margin-bottom: 4px;
+}
+.plan-price sup { font-size: 22px; vertical-align: super; }
+.plan-price sub { font-size: 15px; font-weight: 300; color: var(--muted); }
+.plan-desc { font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.55; margin: 14px 0; }
+.plan-rule { height: 1px; background: var(--border); margin: 16px 0; }
+.plan-features { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.plan-features li {
+  font-size: 12.5px; color: var(--muted); font-weight: 300;
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.plan-features li::before { content: '→'; color: var(--red); flex-shrink: 0; font-family: var(--mono); }
+.plan-features li.off { color: var(--dim); }
+.plan-features li.off::before { content: '·'; color: var(--dim); }
+.plan-btn {
+  display: block; text-align: center; margin-top: 22px; padding: 11px;
+  font-family: var(--cond); font-size: 13px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  text-decoration: none; transition: all .15s;
+}
+.plan-btn.outline {
+  border: 1px solid var(--dim); color: var(--muted);
+  clip-path: polygon(6px 0, 100% 0, calc(100%-6px) 100%, 0 100%);
+}
+.plan-btn.outline:hover { border-color: var(--white); color: var(--white); }
+.plan-btn.solid {
+  background: var(--grad); color: white;
+  clip-path: polygon(6px 0, 100% 0, calc(100%-6px) 100%, 0 100%);
+}
+.plan-btn.solid:hover { opacity: .88; }
 
-/* ── Beta banner ── */
-.beta-banner{background:linear-gradient(135deg,rgba(255,200,40,.1),rgba(34,211,187,.08));border:1px solid rgba(255,200,40,.25);border-radius:16px;padding:48px;text-align:center;margin:0 0 80px}
-.beta-banner h2{font-size:32px;font-weight:800;margin-bottom:12px}
-.beta-banner p{color:var(--text2);font-size:16px;margin-bottom:32px;max-width:460px;margin-left:auto;margin-right:auto}
-.beta-tag{display:inline-block;background:rgba(255,200,40,.15);border:1px solid rgba(255,200,40,.3);color:var(--gold);font-family:var(--mono);font-size:11px;padding:5px 14px;border-radius:100px;margin-bottom:20px;letter-spacing:.06em}
+/* ── Beta section ── */
+.beta-section {
+  padding: 100px 0;
+  position: relative; overflow: hidden; z-index: 1;
+}
+.beta-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(115deg, rgba(232,50,26,0.06) 0%, transparent 60%);
+}
+.beta-inner {
+  border: 1px solid rgba(232,50,26,0.25);
+  border-top: 2px solid var(--red);
+  padding: 64px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+  position: relative;
+}
+.beta-tag {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 20px;
+}
+.beta-inner h2 {
+  font-family: var(--cond); font-size: clamp(36px, 5vw, 64px); font-weight: 900;
+  text-transform: uppercase; letter-spacing: -.01em; line-height: .95; margin-bottom: 20px;
+}
+.beta-inner h2 span {
+  background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.beta-inner p { font-size: 16px; color: var(--muted); font-weight: 300; max-width: 480px; margin-bottom: 36px; line-height: 1.7; }
+.beta-note { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-top: 16px; letter-spacing: .06em; }
 
 /* ── Footer ── */
-footer{border-top:1px solid var(--border);padding:40px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
-.footer-logo{font-weight:700;font-size:16px}
-.footer-logo span{color:var(--gold)}
-.footer-copy{font-size:13px;color:var(--muted)}
-.footer-tagline{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em}
-
-@media(max-width:768px){
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
-  .steps{grid-template-columns:1fr}
-  .ind-grid{grid-template-columns:repeat(2,1fr)}
-  .pricing-grid{grid-template-columns:1fr 1fr}
-  .nav-links{display:none}
+footer {
+  border-top: 1px solid var(--border);
+  padding: 36px 0; position: relative; z-index: 1;
 }
-@media(max-width:500px){
-  .pricing-grid{grid-template-columns:1fr}
-  .ind-grid{grid-template-columns:1fr}
+.foot-inner {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+}
+.foot-logo { font-family: var(--cond); font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+.foot-logo span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.foot-tagline { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: .08em; }
+.foot-copy { font-size: 12px; color: var(--dim); }
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-badge   { animation: fadeUp .5s ease both; }
+.hero h1      { animation: fadeUp .5s .1s ease both; }
+.hero-sub     { animation: fadeUp .5s .2s ease both; }
+.hero-actions { animation: fadeUp .5s .3s ease both; }
+.hero-stats   { animation: fadeUp .5s .4s ease both; }
+.demo-card    { animation: fadeUp .6s .2s ease both; }
+
+/* ── Speed line decoration ── */
+.speed-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--red) 40%, var(--orange) 70%, transparent);
+  margin: 0;
+  opacity: .4;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+  .steps { grid-template-columns: 1fr; }
+  .ind-grid { grid-template-columns: repeat(2, 1fr); }
+  .pricing-grid { grid-template-columns: 1fr 1fr; }
+  .nav-links { display: none; }
+  .beta-inner { padding: 36px 28px; }
+}
+@media (max-width: 540px) {
+  .pricing-grid { grid-template-columns: 1fr; }
+  .ind-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: 24px; }
 }
 </style>
 </head>
@@ -156,105 +410,117 @@ footer{border-top:1px solid var(--border);padding:40px 0;display:flex;align-item
 <!-- Nav -->
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#">
-      <div class="nav-logo-icon">⚡</div>
-      Book<span>Bot</span>
-    </a>
+    <a class="nav-logo" href="#">Book<span>Bot</span></a>
     <div class="nav-links">
       <a href="#how">How it works</a>
       <a href="#industries">Industries</a>
       <a href="#pricing">Pricing</a>
-      <a href="#beta">Free Trial</a>
     </div>
-    <a href="#beta" class="nav-cta">Start Free →</a>
+    <a href="#beta" class="nav-cta">Free Beta →</a>
   </div>
 </nav>
 
 <!-- Hero -->
 <section class="hero">
   <div class="wrap">
-    <div class="hero-badge"><span></span> Now available in Southeast Asia</div>
-    <h1>Bookings on <em>LINE</em><br>& <em>WhatsApp</em>.<br>Fully automated.</h1>
-    <p class="hero-sub">Customers text naturally. BookBot understands, confirms, and manages everything — in any language, 24/7.</p>
-    <div class="hero-actions">
-      <a href="#beta" class="btn-primary">⚡ Start Free Trial</a>
-      <a href="#how" class="btn-secondary">See how it works</a>
-    </div>
-    <p class="hero-note">14-day free trial · No credit card · Setup in 15 minutes</p>
-
-    <!-- Demo chat -->
-    <div class="demo-wrap">
-      <div class="demo-header">
-        <div class="demo-avatar">⚡</div>
-        <div>
-          <div class="demo-name">BookBot</div>
-          <div class="demo-status">● Online</div>
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge">Now live across Southeast Asia</div>
+        <h1>
+          Bookings on<br>
+          <span class="line2">LINE &amp;<br>WhatsApp.</span>
+          <span class="line3">Fully automated.</span>
+        </h1>
+        <p class="hero-sub">Customers text naturally. BookBot understands, confirms, and manages everything — in any language, 24 hours a day.</p>
+        <div class="hero-actions">
+          <a href="#beta" class="btn-primary">Start Free Beta</a>
+          <a href="#how" class="btn-ghost">See how it works →</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-num">15<small style="font-size:18px">min</small></div>
+            <div class="hero-stat-label">Setup time</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">6+</div>
+            <div class="hero-stat-label">Industries</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">$0</div>
+            <div class="hero-stat-label">Infrastructure cost</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">5</div>
+            <div class="hero-stat-label">Languages</div>
+          </div>
         </div>
       </div>
-      <div class="demo-body">
-        <div class="bubble user">I'd like to book the futsal court on Saturday 10am–12pm for 5 people</div>
-        <div class="bubble-time">10:23 AM</div>
-        <div class="bubble bot">
-          <strong>✅ Booking Confirmed!</strong><br><br>
-          📅 Saturday, June 7<br>
-          🕙 10:00 AM – 12:00 PM<br>
-          ⚽ Futsal Court A<br>
-          👥 5 people<br>
-          💰 $24.00<br><br>
-          A reminder will be sent the evening before. Reply <strong>/cancel</strong> to cancel.
+
+      <!-- Demo -->
+      <div class="demo-card">
+        <div class="demo-topbar">
+          <div class="demo-dot" style="background:#E8321A"></div>
+          <div class="demo-dot" style="background:#FF9520;margin-left:4px"></div>
+          <div class="demo-dot" style="background:#4ADE80;margin-left:4px"></div>
+          <div class="demo-status">BookBot · <span>● Online</span></div>
         </div>
-        <div class="bubble-time">10:23 AM · BookBot</div>
+        <div class="demo-body">
+          <div class="bubble user">I'd like to book the futsal court on Saturday 10am–12pm, 5 people</div>
+          <div class="bubble-time">10:23 AM</div>
+          <div class="bubble bot">
+            <strong>✅ Confirmed.</strong><br><br>
+            📅 Saturday, June 7<br>
+            🕙 10:00 – 12:00<br>
+            ⚽ Futsal Court A · 5 pax<br>
+            💰 $24.00<br><br>
+            Reminder sent the evening before.<br>Reply <strong>/cancel</strong> to cancel.
+          </div>
+          <div class="bubble-time">10:23 AM · BookBot</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Stats -->
-<div class="stats">
-  <div class="wrap">
-    <div class="stats-grid">
-      <div class="stat"><div class="stat-num">15<span style="font-size:24px">min</span></div><div class="stat-label">Setup time</div></div>
-      <div class="stat"><div class="stat-num">6+</div><div class="stat-label">Industries supported</div></div>
-      <div class="stat"><div class="stat-num">5</div><div class="stat-label">Languages (auto-detect)</div></div>
-      <div class="stat"><div class="stat-num">$0</div><div class="stat-label">Infrastructure cost</div></div>
-    </div>
-  </div>
-</div>
+<span class="speed-line"></span>
+<div class="divider"></div>
 
 <!-- How it works -->
 <section class="section" id="how">
   <div class="wrap">
-    <div class="section-label">// how it works</div>
-    <h2 class="section-title">Three steps.<br>Zero complexity.</h2>
-    <p class="section-sub">No app to build. No server to manage. BookBot runs entirely on free Google infrastructure.</p>
+    <div class="s-label">How it works</div>
+    <h2 class="s-title">Three steps.<br><em>Zero complexity.</em></h2>
+    <p class="s-sub">No app to build. No server to manage. Runs entirely on free Google infrastructure.</p>
     <div class="steps">
       <div class="step">
-        <div class="step-num">01 / CONNECT</div>
+        <div class="step-num">01 — CONNECT</div>
         <div class="step-icon">🔗</div>
-        <h3>Link your LINE or WhatsApp</h3>
-        <p>Connect your existing LINE Official Account or WhatsApp Business to BookBot. Takes 5 minutes.</p>
+        <h3>Link LINE or WhatsApp</h3>
+        <p>Connect your existing LINE Official Account or WhatsApp Business. Takes 5 minutes, no technical knowledge required.</p>
       </div>
       <div class="step">
-        <div class="step-num">02 / CONFIGURE</div>
+        <div class="step-num">02 — CONFIGURE</div>
         <div class="step-icon">⚙️</div>
-        <h3>Set your business details</h3>
-        <p>Fill in a Google Sheet with your hours, resources, and pricing. No coding required.</p>
+        <h3>Set your details</h3>
+        <p>Fill in a Google Sheet with your hours, resources, and pricing. Nothing to install, nothing to code.</p>
       </div>
       <div class="step">
-        <div class="step-num">03 / GO LIVE</div>
+        <div class="step-num">03 — GO LIVE</div>
         <div class="step-icon">⚡</div>
         <h3>Receive bookings automatically</h3>
-        <p>Customers message you naturally. BookBot handles everything — confirmation, calendar, reminders.</p>
+        <p>Customers message naturally in their language. BookBot handles confirmation, calendar, and reminders.</p>
       </div>
     </div>
   </div>
 </section>
 
+<div class="divider"></div>
+
 <!-- Industries -->
-<section class="industries" id="industries">
+<section class="section" id="industries" style="padding-top:80px;padding-bottom:80px">
   <div class="wrap">
-    <div class="section-label">// industries</div>
-    <h2 class="section-title">Works for<br>any business.</h2>
+    <div class="s-label">Industries</div>
+    <h2 class="s-title">Works for<br><em>any business.</em></h2>
     <div class="ind-grid">
       <div class="ind-card"><div class="ind-icon">⚽</div><div><div class="ind-name">Sports Facilities</div><div class="ind-desc">Futsal, badminton, tennis, swimming</div></div></div>
       <div class="ind-card"><div class="ind-icon">💇</div><div><div class="ind-name">Beauty & Wellness</div><div class="ind-desc">Salons, nail studios, massage, spa</div></div></div>
@@ -266,56 +532,57 @@ footer{border-top:1px solid var(--border);padding:40px 0;display:flex;align-item
   </div>
 </section>
 
+<span class="speed-line"></span>
+<div class="divider"></div>
+
 <!-- Pricing -->
-<section class="pricing" id="pricing">
+<section class="section" id="pricing">
   <div class="wrap">
-    <div class="section-label">// pricing</div>
-    <h2 class="section-title">Simple, honest pricing.</h2>
-    <p class="section-sub" style="margin-bottom:0">All plans include a 14-day free trial. No credit card required to start.</p>
+    <div class="s-label">Pricing</div>
+    <h2 class="s-title">Simple,<br><em>honest pricing.</em></h2>
+    <p class="s-sub">All plans include a 14-day free trial. No credit card required to start.</p>
     <div class="pricing-grid">
 
       <div class="plan">
         <div class="plan-name">Starter</div>
         <div class="plan-price"><sup>$</sup>9<sub>/mo</sub></div>
-        <div class="plan-desc">Perfect for solo operators and small facilities getting started.</div>
-        <div class="plan-divider"></div>
+        <div class="plan-desc">For solo operators getting started with automation.</div>
+        <div class="plan-rule"></div>
         <ul class="plan-features">
           <li>LINE or WhatsApp (1 channel)</li>
-          <li>Up to 100 bookings/month</li>
+          <li>100 bookings/month</li>
           <li>Google Calendar sync</li>
           <li>Auto reminders</li>
           <li>5 languages</li>
-          <li class="muted">Stripe payments</li>
-          <li class="muted">Multi-resource</li>
-          <li class="muted">Priority support</li>
+          <li class="off">Stripe payments</li>
+          <li class="off">Multi-resource</li>
         </ul>
-        <a href="#beta" class="plan-btn outline">Start Free Trial</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSekZocD7xerK_lebkIp7bZh3arsWNu2cDFNOSbQEe2cg6sMBw/viewform" class="plan-btn outline">Start Free Trial</a>
       </div>
 
       <div class="plan featured">
-        <div class="plan-badge">MOST POPULAR</div>
+        <div class="plan-badge">★ Most popular</div>
         <div class="plan-name">Pro</div>
         <div class="plan-price"><sup>$</sup>19<sub>/mo</sub></div>
-        <div class="plan-desc">For growing businesses that need more automation and payment collection.</div>
-        <div class="plan-divider"></div>
+        <div class="plan-desc">For growing businesses that need payments and more volume.</div>
+        <div class="plan-rule"></div>
         <ul class="plan-features">
           <li>LINE + WhatsApp (both)</li>
-          <li>Up to 500 bookings/month</li>
+          <li>500 bookings/month</li>
           <li>Google Calendar sync</li>
           <li>Auto reminders</li>
           <li>5 languages</li>
           <li>Stripe payment links</li>
-          <li>Multi-resource management</li>
-          <li class="muted">Priority support</li>
+          <li>Multi-resource</li>
         </ul>
-        <a href="#beta" class="plan-btn solid">Start Free Trial</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSekZocD7xerK_lebkIp7bZh3arsWNu2cDFNOSbQEe2cg6sMBw/viewform" class="plan-btn solid">Start Free Trial</a>
       </div>
 
       <div class="plan">
         <div class="plan-name">Business</div>
         <div class="plan-price"><sup>$</sup>49<sub>/mo</sub></div>
         <div class="plan-desc">For multi-location businesses and high-volume facilities.</div>
-        <div class="plan-divider"></div>
+        <div class="plan-rule"></div>
         <ul class="plan-features">
           <li>LINE + WhatsApp (both)</li>
           <li>Unlimited bookings</li>
@@ -323,52 +590,50 @@ footer{border-top:1px solid var(--border);padding:40px 0;display:flex;align-item
           <li>Auto reminders</li>
           <li>5 languages</li>
           <li>Stripe payment links</li>
-          <li>Multi-resource management</li>
-          <li>Priority support</li>
+          <li>Multi-resource + Priority support</li>
         </ul>
-        <a href="#beta" class="plan-btn outline">Start Free Trial</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSekZocD7xerK_lebkIp7bZh3arsWNu2cDFNOSbQEe2cg6sMBw/viewform" class="plan-btn outline">Start Free Trial</a>
       </div>
 
       <div class="plan">
         <div class="plan-name">Agency</div>
         <div class="plan-price"><sup>$</sup>99<sub>/mo</sub></div>
         <div class="plan-desc">For agencies managing BookBot for multiple clients.</div>
-        <div class="plan-divider"></div>
+        <div class="plan-rule"></div>
         <ul class="plan-features">
           <li>Everything in Business</li>
           <li>Up to 10 client accounts</li>
           <li>White-label option</li>
           <li>Dedicated onboarding</li>
           <li>20% referral commission</li>
-          <li>Priority support</li>
           <li>Custom integrations</li>
-          <li>Agency dashboard</li>
         </ul>
-        <a href="#beta" class="plan-btn outline">Contact Us</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSekZocD7xerK_lebkIp7bZh3arsWNu2cDFNOSbQEe2cg6sMBw/viewform" class="plan-btn outline">Contact Us</a>
       </div>
 
     </div>
   </div>
 </section>
 
+<span class="speed-line"></span>
+
 <!-- Beta -->
-<section id="beta">
+<section class="beta-section" id="beta">
   <div class="wrap">
-    <div class="beta-banner">
-      <div class="beta-tag">FREE BETA PROGRAM</div>
-      <h2>Be one of our first 10 users.<br>Get 6 months free.</h2>
-      <p>We're looking for 10 businesses to test BookBot and give feedback. In return, you get 6 months completely free — no strings attached.</p>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSekZocD7xerK_lebkIp7bZh3arsWNu2cDFNOSbQEe2cg6sMBw/viewform" class="btn-primary" style="display:inline-flex">
-        ⚡ Apply for Free Beta
-      </a>
-      <p style="font-size:13px;color:var(--muted);margin-top:16px">Takes 2 minutes · Spots filling fast · We'll set everything up for you</p>
+    <div class="beta-inner">
+      <div class="beta-tag">// Free Beta Program — 10 spots only</div>
+      <h2>Be among the first.<br><span>Get 6 months free.</span></h2>
+      <p>We're looking for 10 businesses to test BookBot and give us feedback. In return, you get 6 months completely free — and we'll support you every step of the way via LINE or DM.</p>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSekZocD7xerK_lebkIp7bZh3arsWNu2cDFNOSbQEe2cg6sMBw/viewform" class="btn-primary">Apply Now — Free Beta</a>
+      <div class="beta-note">Takes 2 minutes · No credit card · LINE / DM support included</div>
     </div>
   </div>
 </section>
 
 <!-- Footer -->
 <footer>
-  <div class="wrap" style="width:100%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
-    <div class="footer-logo">Book<span>Bot</span></div>
-    <div class="footer-tagline">Make fast. Make simple.</div>
-    <div class="footer-copy">© 2026 BookBot · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" dat
+  <div class="wrap">
+    <div class="foot-inner">
+      <div class="foot-logo">Book<span>Bot</span></div>
+      <div class="foot-tagline">Make fast. Make simple.</div>
+      <div class="foot-copy">© 2026 BookBot · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="
